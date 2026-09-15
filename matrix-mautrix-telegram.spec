@@ -27,6 +27,7 @@ Source0:        https://github.com/mautrix/telegram/archive/refs/tags/v0.2608.0.
 Source1:        %{name}.service
 Source2:        %{name}.sysusers
 Source3:        %{name}.tmpfiles
+Source4:        vendor.tar.zst
 # Security fix: bump golang.org/x/crypto past GO-2026-6354 / GO-2026-6355
 # (SSH-channel DoS in x/crypto/ssh; mautrix-telegram doesn't use SSH itself,
 # but this closes the dependency-scanner finding at build time).
@@ -37,6 +38,7 @@ Patch0:         0001-bump-x-crypto-0.56.0-security.patch
 BuildRequires:  go1.27
 BuildRequires:  olm-devel
 BuildRequires:  sysuser-tools
+BuildRequires:  zstd
 %sysusers_requires
 %systemd_requires
 Requires:       libolm3
@@ -64,17 +66,17 @@ a specific config generator. The actual config.yaml/registration.yaml are
 generated on first start by the bridge binary itself (see README).
 
 %prep
-%autosetup -p1 -n mautrix-telegram-%{version}
+%autosetup -p1 -n mautrix-telegram-%{version} -a4
 
 %build
-export GOFLAGS="-mod=mod -buildmode=pie"
+export GOFLAGS="-mod=vendor -buildmode=pie"
 export CGO_ENABLED=1
 export GOPATH=%{_builddir}/go
 LDFLAGS="-linkmode=external"
 LDFLAGS="$LDFLAGS -X main.Tag=v0.2608.0"
 LDFLAGS="$LDFLAGS -X main.Commit=3df4c4ae87cab0a590ec0aaa139e0c1361460028"
 LDFLAGS="$LDFLAGS -X main.BuildTime=$(date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ)"
-go build -ldflags="$LDFLAGS" -o mautrix-telegram ./cmd/mautrix-telegram
+go build -mod=vendor -ldflags="$LDFLAGS" -o mautrix-telegram ./cmd/mautrix-telegram
 
 %install
 install -D -m 0755 mautrix-telegram %{buildroot}%{_bindir}/matrix-mautrix-telegram

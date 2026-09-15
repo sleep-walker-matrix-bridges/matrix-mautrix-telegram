@@ -55,6 +55,29 @@ glance.
 
 - `go1.27`
 - `olm-devel` (build), `libolm3` (runtime)
+- `zstd` (build, for unpacking the vendor tarball)
+
+## Vendored dependencies (`vendor.tar.zst`)
+
+OBS build workers have no network access, so Go module downloads that work
+fine locally (`go build` reaching proxy.golang.org) fail on the build farm.
+The standard openSUSE fix is vendoring: `vendor.tar.zst` in this repo
+contains the full `vendor/` tree (`go mod vendor` output, zstd-compressed),
+and the spec builds with `-mod=vendor` against it.
+
+To regenerate after a `go.mod`/`go.sum` change (e.g. the next audit-driven
+dependency bump):
+
+```bash
+cd mautrix-telegram-src   # the upstream checkout, patched to this package's tag
+go mod vendor
+tar --zstd -cf vendor.tar.zst vendor/
+```
+
+(The `openSUSE/obs-service-go_modules` OBS source service automates exactly
+this — `osc service manualrun` — once that service is available in this
+project; the `_service` file here documents the equivalent manual command
+until then.)
 
 ## Package layout
 
@@ -79,5 +102,6 @@ just builds whatever this repo's default branch currently contains.
 - [x] Upstream tag pinned, source vendored as reproducible tarball
 - [x] Security audit (govulncheck + osv-scanner)
 - [x] RPM spec, systemd unit, sysusers/tmpfiles config
+- [x] Go module dependencies vendored (vendor.tar.zst) for offline OBS builds
 - [ ] Built and tested in OBS
 - [ ] Deployed on `doom`, Docker container decommissioned
