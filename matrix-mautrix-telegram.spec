@@ -113,6 +113,7 @@ install -D -m 0644 pkg/connector/example-config.yaml %{buildroot}%{_datadir}/%{n
 %{_tmpfilesdir}/%{name}.conf
 %dir %attr(0750,%{bridge_user},%{bridge_user}) %{bridge_datadir}
 %dir %attr(0750,%{bridge_user},%{bridge_user}) %{bridge_logdir}
+%dir %{_datadir}/%{name}
 %{_datadir}/%{name}/example-config.yaml
 
 %files config
