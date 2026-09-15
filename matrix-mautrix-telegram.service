@@ -28,8 +28,7 @@ RestrictRealtime=true
 RestrictNamespaces=true
 LockPersonality=true
 MemoryDenyWriteExecute=false
-ReadWritePaths=/var/lib/matrix-mautrix-telegram /var/log/matrix-mautrix-telegram
-ReadOnlyPaths=/etc/matrix-mautrix-telegram
+ReadWritePaths=/var/lib/matrix-mautrix-telegram /var/log/matrix-mautrix-telegram /etc/matrix-mautrix-telegram
 
 [Install]
 WantedBy=multi-user.target
