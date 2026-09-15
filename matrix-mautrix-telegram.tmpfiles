@@ -1,0 +1,3 @@
+d /var/lib/matrix-mautrix-telegram 0750 matrix-mautrix-telegram matrix-mautrix-telegram -
+d /var/log/matrix-mautrix-telegram 0750 matrix-mautrix-telegram matrix-mautrix-telegram -
+d /etc/matrix-mautrix-telegram 0750 matrix-mautrix-telegram matrix-mautrix-telegram -

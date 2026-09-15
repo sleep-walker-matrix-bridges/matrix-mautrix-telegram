@@ -1,0 +1,2 @@
+#Type Name                       ID   GECOS                              Home directory
+u     matrix-mautrix-telegram    -    "Matrix-Telegram bridge daemon"    /var/lib/matrix-mautrix-telegram

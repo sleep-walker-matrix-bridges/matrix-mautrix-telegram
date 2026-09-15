@@ -1,0 +1,35 @@
+[Unit]
+Description=Matrix-Telegram puppeting bridge (mautrix-telegram)
+Documentation=https://docs.mau.fi/bridges/go/telegram/index.html
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=matrix-mautrix-telegram
+Group=matrix-mautrix-telegram
+ExecStart=/usr/bin/matrix-mautrix-telegram -c /etc/matrix-mautrix-telegram/config.yaml
+WorkingDirectory=/var/lib/matrix-mautrix-telegram
+Restart=on-failure
+RestartSec=5s
+
+# Hardening — the bridge only needs to read its config, read/write its own
+# data directory, and reach the network (Telegram + the homeserver).
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=false
+ReadWritePaths=/var/lib/matrix-mautrix-telegram /var/log/matrix-mautrix-telegram
+ReadOnlyPaths=/etc/matrix-mautrix-telegram
+
+[Install]
+WantedBy=multi-user.target
