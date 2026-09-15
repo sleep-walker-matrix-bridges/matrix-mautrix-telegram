@@ -39,6 +39,8 @@ BuildRequires:  go1.27
 BuildRequires:  olm-devel
 BuildRequires:  sysuser-tools
 BuildRequires:  zstd
+BuildRequires:  gcc-c++
+BuildRequires:  libstdc++-devel
 %sysusers_requires
 %systemd_requires
 Requires:       libolm3
